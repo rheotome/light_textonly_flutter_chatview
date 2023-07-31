@@ -1,3 +1,12 @@
+
+# Light Text Only Flutter ChatView
+
+Modified by test3teamapp
+Credits to [SimformSolutionsPvtLtd](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/tree/main)
+
+## Original README
+## ----------------
+
 ![Banner](https://raw.githubusercontent.com/SimformSolutionsPvtLtd/flutter_chat_ui/main/preview/banner.png)
 
 # ChatView

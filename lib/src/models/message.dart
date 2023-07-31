@@ -42,17 +42,12 @@ class Message {
   /// Provides reply message if user triggers any reply on any message.
   final ReplyMessage replyMessage;
 
-  /// Represents reaction on message.
-  final Reaction reaction;
-
   /// Provides message type.
   final MessageType messageType;
 
   /// Status of the message.
   final ValueNotifier<MessageStatus> _status;
 
-  /// Provides max duration for recorded voice message.
-  Duration? voiceMessageDuration;
 
   Message({
     this.id = '',
@@ -60,20 +55,10 @@ class Message {
     required this.createdAt,
     required this.sendBy,
     this.replyMessage = const ReplyMessage(),
-    Reaction? reaction,
     this.messageType = MessageType.text,
-    this.voiceMessageDuration,
     MessageStatus status = MessageStatus.pending,
-  })  : reaction = reaction ?? Reaction(reactions: [], reactedUserIds: []),
-        key = GlobalKey(),
-        _status = ValueNotifier(status),
-        assert(
-          (messageType.isVoice
-              ? ((defaultTargetPlatform == TargetPlatform.iOS ||
-                  defaultTargetPlatform == TargetPlatform.android))
-              : true),
-          "Voice messages are only supported with android and ios platform",
-        );
+  })  : key = GlobalKey(),
+        _status = ValueNotifier(status);
 
   /// curret messageStatus
   MessageStatus get status => _status.value;
@@ -96,9 +81,7 @@ class Message {
       createdAt: json["createdAt"],
       sendBy: json["sendBy"],
       replyMessage: ReplyMessage.fromJson(json["reply_message"]),
-      reaction: Reaction.fromJson(json["reaction"]),
       messageType: json["message_type"],
-      voiceMessageDuration: json["voice_message_duration"],
       status: json['status']);
 
   Map<String, dynamic> toJson() => {
@@ -107,9 +90,7 @@ class Message {
         'createdAt': createdAt,
         'sendBy': sendBy,
         'reply_message': replyMessage.toJson(),
-        'reaction': reaction.toJson(),
         'message_type': messageType,
-        'voice_message_duration': voiceMessageDuration,
         'status': status.name
       };
 }

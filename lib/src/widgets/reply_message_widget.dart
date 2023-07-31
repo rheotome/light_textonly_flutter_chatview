@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import 'package:audio_waveforms/audio_waveforms.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:chatview/src/extensions/extensions.dart';
@@ -95,71 +95,30 @@ class ReplyMessageWidget extends StatelessWidget {
                   Flexible(
                     child: Opacity(
                       opacity: repliedMessageConfig?.opacity ?? 0.8,
-                      child: message.replyMessage.messageType.isImage
-                          ? Container(
-                              height: repliedMessageConfig
-                                      ?.repliedImageMessageHeight ??
-                                  100,
-                              width: repliedMessageConfig
-                                      ?.repliedImageMessageWidth ??
-                                  80,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(replyMessage),
-                                  fit: BoxFit.fill,
-                                ),
-                                borderRadius:
-                                    repliedMessageConfig?.borderRadius ??
-                                        BorderRadius.circular(14),
-                              ),
-                            )
-                          : Container(
-                              constraints: BoxConstraints(
-                                maxWidth: repliedMessageConfig?.maxWidth ?? 280,
-                              ),
-                              padding: repliedMessageConfig?.padding ??
-                                  const EdgeInsets.symmetric(
-                                    vertical: 8,
-                                    horizontal: 12,
-                                  ),
-                              decoration: BoxDecoration(
-                                borderRadius: _borderRadius(
-                                  replyMessage: replyMessage,
-                                  replyBySender: replyBySender,
-                                ),
-                                color: repliedMessageConfig?.backgroundColor ??
-                                    Colors.grey.shade500,
-                              ),
-                              child: message.replyMessage.messageType.isVoice
-                                  ? Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.mic,
-                                          color: repliedMessageConfig
-                                                  ?.micIconColor ??
-                                              Colors.white,
-                                        ),
-                                        const SizedBox(width: 2),
-                                        if (message.replyMessage
-                                                .voiceMessageDuration !=
-                                            null)
-                                          Text(
-                                            message.replyMessage
-                                                .voiceMessageDuration!
-                                                .toHHMMSS(),
-                                            style:
-                                                repliedMessageConfig?.textStyle,
-                                          ),
-                                      ],
-                                    )
-                                  : Text(
-                                      replyMessage,
-                                      style: repliedMessageConfig?.textStyle ??
-                                          textTheme.bodyMedium!
-                                              .copyWith(color: Colors.black),
-                                    ),
+                      child: Container(
+                        constraints: BoxConstraints(
+                          maxWidth: repliedMessageConfig?.maxWidth ?? 280,
+                        ),
+                        padding: repliedMessageConfig?.padding ??
+                            const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 12,
                             ),
+                        decoration: BoxDecoration(
+                          borderRadius: _borderRadius(
+                            replyMessage: replyMessage,
+                            replyBySender: replyBySender,
+                          ),
+                          color: repliedMessageConfig?.backgroundColor ??
+                              Colors.grey.shade500,
+                        ),
+                        child: Text(
+                          replyMessage,
+                          style: repliedMessageConfig?.textStyle ??
+                              textTheme.bodyMedium!
+                                  .copyWith(color: Colors.black),
+                        ),
+                      ),
                     ),
                   ),
                   if (replyBySender)

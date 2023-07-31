@@ -39,16 +39,12 @@ class ChatView extends StatefulWidget {
     this.repliedMessageConfig,
     this.swipeToReplyConfig,
     this.replyPopupConfig,
-    this.reactionPopupConfig,
     this.loadMoreData,
     this.loadingWidget,
     this.messageConfig,
     this.isLastPage,
-    this.appBar,
     ChatBackgroundConfiguration? chatBackgroundConfig,
-    this.typeIndicatorConfig,
     this.sendMessageBuilder,
-    this.showTypingIndicator = false,
     this.sendMessageConfig,
     required this.chatViewState,
     ChatViewStateConfiguration? chatViewStateConfig,
@@ -81,9 +77,6 @@ class ChatView extends StatefulWidget {
   /// Provides configuration for reply snack bar's appearance and options.
   final ReplyPopupConfiguration? replyPopupConfig;
 
-  /// Provides configuration for reaction pop up appearance.
-  final ReactionPopupConfiguration? reactionPopupConfig;
-
   /// Allow user to give customisation to background of chat
   final ChatBackgroundConfiguration chatBackgroundConfig;
 
@@ -106,11 +99,6 @@ class ChatView extends StatefulWidget {
 
   @Deprecated('Use [ChatController.setTypingIndicator]  instead')
 
-  /// Allow user to show typing indicator.
-  final bool showTypingIndicator;
-
-  /// Allow user to giving customisation typing indicator.
-  final TypeIndicatorConfiguration? typeIndicatorConfig;
 
   /// Provides controller for accessing few function for running chat.
   final ChatController chatController;
@@ -129,9 +117,6 @@ class ChatView extends StatefulWidget {
 
   /// Provides configuration for turn on/off specific features.
   final FeatureActiveConfig featureActiveConfig;
-
-  /// Provides parameter so user can assign ChatViewAppbar.
-  final Widget? appBar;
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -170,9 +155,7 @@ class _ChatViewState extends State<ChatView>
     // Scroll to last message on in hasMessages state.
     // TODO: Remove this in new versions.
     // ignore: deprecated_member_use_from_same_package
-    if (widget.showTypingIndicator ||
-        widget.chatController.showTypingIndicator &&
-            chatViewState.hasMessages) {
+    if (chatViewState.hasMessages) {
       chatController.scrollToLastMessage();
     }
     return ChatViewInheritedWidget(
@@ -196,7 +179,6 @@ class _ChatViewState extends State<ChatView>
         margin: chatBackgroundConfig.margin,
         child: Column(
           children: [
-            if (widget.appBar != null) widget.appBar!,
             Expanded(
               child: Stack(
                 children: [
@@ -227,12 +209,9 @@ class _ChatViewState extends State<ChatView>
                         return ChatListWidget(
                           /// TODO: Remove this in future releases.
                           // ignore: deprecated_member_use_from_same_package
-                          showTypingIndicator: widget.showTypingIndicator,
                           replyMessage: state,
                           chatController: widget.chatController,
                           chatBackgroundConfig: widget.chatBackgroundConfig,
-                          reactionPopupConfig: widget.reactionPopupConfig,
-                          typeIndicatorConfig: widget.typeIndicatorConfig,
                           chatBubbleConfig: widget.chatBubbleConfig,
                           loadMoreData: widget.loadMoreData,
                           isLastPage: widget.isLastPage,

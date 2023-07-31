@@ -88,11 +88,8 @@ extension ValidateString on String {
 
 /// Extension on MessageType for checking specific message type
 extension MessageTypes on MessageType {
-  bool get isImage => this == MessageType.image;
 
   bool get isText => this == MessageType.text;
-
-  bool get isVoice => this == MessageType.voice;
 
   bool get isCustom => this == MessageType.custom;
 }

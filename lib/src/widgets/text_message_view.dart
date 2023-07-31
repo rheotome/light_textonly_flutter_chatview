@@ -26,7 +26,6 @@ import 'package:chatview/src/models/models.dart';
 
 import '../utils/constants/constants.dart';
 import 'link_preview.dart';
-import 'reaction_widget.dart';
 
 class TextMessageView extends StatelessWidget {
   const TextMessageView({
@@ -36,7 +35,6 @@ class TextMessageView extends StatelessWidget {
     this.chatBubbleMaxWidth,
     this.inComingChatBubbleConfig,
     this.outgoingChatBubbleConfig,
-    this.messageReactionConfig,
     this.highlightMessage = false,
     this.highlightColor,
   }) : super(key: key);
@@ -55,9 +53,6 @@ class TextMessageView extends StatelessWidget {
 
   /// Provides configuration of chat bubble appearance from current user of chat.
   final ChatBubble? outgoingChatBubbleConfig;
-
-  /// Provides configuration of reaction appearance in chat bubble.
-  final MessageReactionConfiguration? messageReactionConfig;
 
   /// Represents message should highlight.
   final bool highlightMessage;
@@ -83,7 +78,7 @@ class TextMessageView extends StatelessWidget {
               ),
           margin: _margin ??
               EdgeInsets.fromLTRB(
-                  5, 0, 6, message.reaction.reactions.isNotEmpty ? 15 : 2),
+                  5, 0, 6, 2),
           decoration: BoxDecoration(
             color: highlightMessage ? highlightColor : _color,
             borderRadius: _borderRadius(textMessage),
@@ -102,13 +97,6 @@ class TextMessageView extends StatelessWidget {
                       ),
                 ),
         ),
-        if (message.reaction.reactions.isNotEmpty)
-          ReactionWidget(
-            key: key,
-            isMessageBySender: isMessageBySender,
-            reaction: message.reaction,
-            messageReactionConfig: messageReactionConfig,
-          ),
       ],
     );
   }

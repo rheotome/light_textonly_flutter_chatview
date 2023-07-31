@@ -1,7 +1,6 @@
 class FeatureActiveConfig {
   const FeatureActiveConfig({
     this.enableSwipeToReply = true,
-    this.enableReactionPopup = true,
     this.enableTextField = true,
     this.enableSwipeToSeeTime = true,
     this.enableCurrentUserProfileAvatar = false,
@@ -16,9 +15,6 @@ class FeatureActiveConfig {
 
   /// Used for enable/disable swipe to reply.
   final bool enableSwipeToReply;
-
-  /// Used for enable/disable reaction pop-up.
-  final bool enableReactionPopup;
 
   /// Used for enable/disable text field.
   final bool enableTextField;

@@ -22,7 +22,6 @@
 import 'package:chatview/chatview.dart';
 import 'package:chatview/src/extensions/extensions.dart';
 import 'package:chatview/src/widgets/chat_view_inherited_widget.dart';
-import 'package:chatview/src/widgets/type_indicator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 
@@ -33,7 +32,6 @@ class ChatGroupedListWidget extends StatefulWidget {
   const ChatGroupedListWidget({
     Key? key,
     required this.showPopUp,
-    required this.showTypingIndicator,
     required this.scrollController,
     required this.chatBackgroundConfig,
     required this.replyMessage,
@@ -46,14 +44,11 @@ class ChatGroupedListWidget extends StatefulWidget {
     this.profileCircleConfig,
     this.swipeToReplyConfig,
     this.repliedMessageConfig,
-    this.typeIndicatorConfig,
   }) : super(key: key);
 
   /// Allow user to swipe to see time while reaction pop is not open.
   final bool showPopUp;
 
-  /// Allow user to show typing indicator.
-  final bool showTypingIndicator;
   final ScrollController scrollController;
 
   /// Allow user to give customisation to background of chat
@@ -72,9 +67,6 @@ class ChatGroupedListWidget extends StatefulWidget {
   /// Allow user to giving customisation to swipe to reply
   final SwipeToReplyConfiguration? swipeToReplyConfig;
   final RepliedMessageConfiguration? repliedMessageConfig;
-
-  /// Allow user to giving customisation typing indicator
-  final TypeIndicatorConfiguration? typeIndicatorConfig;
 
   /// Provides reply message if actual message is sent by replying any message.
   final ReplyMessage replyMessage;
@@ -102,8 +94,6 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
       widget.chatBackgroundConfig;
 
   bool get showPopUp => widget.showPopUp;
-
-  bool get showTypingIndicator => widget.showTypingIndicator;
 
   bool highlightMessage = false;
   final ValueNotifier<String?> _replyId = ValueNotifier(null);
@@ -163,7 +153,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
       reverse: true,
       // When reaction popup is being appeared at that user should not scroll.
       physics: showPopUp ? const NeverScrollableScrollPhysics() : null,
-      padding: EdgeInsets.only(bottom: showTypingIndicator ? 50 : 0),
+      padding: EdgeInsets.only(bottom: 0),
       controller: widget.scrollController,
       child: Column(
         children: [
@@ -188,24 +178,6 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
                   )
                 : _chatStreamBuilder,
           ),
-          widget.showTypingIndicator
-              ? TypingIndicator(
-                  typeIndicatorConfig: widget.typeIndicatorConfig,
-                  chatBubbleConfig: chatBubbleConfig?.inComingChatBubbleConfig,
-                  showIndicator: widget.showTypingIndicator,
-                  profilePic: profileCircleConfig?.profileImageUrl,
-                )
-              : ValueListenableBuilder(
-                  valueListenable: ChatViewInheritedWidget.of(context)!
-                      .chatController
-                      .typingIndicatorNotifier,
-                  builder: (context, value, child) => TypingIndicator(
-                        typeIndicatorConfig: widget.typeIndicatorConfig,
-                        chatBubbleConfig:
-                            chatBubbleConfig?.inComingChatBubbleConfig,
-                        showIndicator: value,
-                        profilePic: profileCircleConfig?.profileImageUrl,
-                      )),
           SizedBox(
             height: MediaQuery.of(context).size.width *
                 (widget.replyMessage.message.isNotEmpty ? 0.3 : 0.14),

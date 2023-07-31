@@ -28,7 +28,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import '../../chatview.dart';
-import 'reaction_popup.dart';
 import 'reply_popup_widget.dart';
 
 class ChatListWidget extends StatefulWidget {
@@ -36,17 +35,14 @@ class ChatListWidget extends StatefulWidget {
     Key? key,
     required this.chatController,
     required this.chatBackgroundConfig,
-    required this.showTypingIndicator,
     required this.assignReplyMessage,
     required this.replyMessage,
     this.loadingWidget,
-    this.reactionPopupConfig,
     this.messageConfig,
     this.chatBubbleConfig,
     this.profileCircleConfig,
     this.swipeToReplyConfig,
     this.repliedMessageConfig,
-    this.typeIndicatorConfig,
     this.replyPopupConfig,
     this.loadMoreData,
     this.isLastPage,
@@ -60,12 +56,6 @@ class ChatListWidget extends StatefulWidget {
 
   /// Provides widget for loading view while pagination is enabled.
   final Widget? loadingWidget;
-
-  /// Provides flag for turn on/off typing indicator.
-  final bool showTypingIndicator;
-
-  /// Provides configuration for reaction pop up appearance.
-  final ReactionPopupConfiguration? reactionPopupConfig;
 
   /// Provides configuration for customisation of different types
   /// messages.
@@ -83,9 +73,6 @@ class ChatListWidget extends StatefulWidget {
   /// Provides configuration for replied message view which is located upon chat
   /// bubble.
   final RepliedMessageConfiguration? repliedMessageConfig;
-
-  /// Provides configuration of typing indicator's appearance.
-  final TypeIndicatorConfiguration? typeIndicatorConfig;
 
   /// Provides reply message when user swipe to chat bubble.
   final ReplyMessage replyMessage;
@@ -112,15 +99,12 @@ class _ChatListWidgetState extends State<ChatListWidget>
     with SingleTickerProviderStateMixin {
   final ValueNotifier<bool> _isNextPageLoading = ValueNotifier(false);
   ValueNotifier<bool> showPopUp = ValueNotifier(false);
-  final GlobalKey<ReactionPopupState> _reactionPopupKey = GlobalKey();
 
   ChatController get chatController => widget.chatController;
 
   List<Message> get messageList => chatController.initialMessageList;
 
   ScrollController get scrollController => chatController.scrollController;
-
-  bool get showTypingIndicator => widget.showTypingIndicator;
 
   ChatBackgroundConfiguration get chatBackgroundConfig =>
       widget.chatBackgroundConfig;
@@ -185,7 +169,6 @@ class _ChatListWidgetState extends State<ChatListWidget>
                 children: [
                   ChatGroupedListWidget(
                     showPopUp: showPopupValue,
-                    showTypingIndicator: showTypingIndicator,
                     scrollController: scrollController,
                     isEnableSwipeToSeeTime:
                         featureActiveConfig?.enableSwipeToSeeTime ?? true,
@@ -197,18 +180,8 @@ class _ChatListWidgetState extends State<ChatListWidget>
                     profileCircleConfig: widget.profileCircleConfig,
                     messageConfig: widget.messageConfig,
                     chatBubbleConfig: widget.chatBubbleConfig,
-                    typeIndicatorConfig: widget.typeIndicatorConfig,
                     onChatBubbleLongPress: (yCoordinate, xCoordinate, message) {
-                      if (featureActiveConfig?.enableReactionPopup ?? false) {
-                        _reactionPopupKey.currentState?.refreshWidget(
-                          message: message,
-                          xCoordinate: xCoordinate,
-                          yCoordinate: yCoordinate < 0
-                              ? -(yCoordinate) - 5
-                              : yCoordinate,
-                        );
-                        showPopUp.value = true;
-                      }
+      
                       if (featureActiveConfig?.enableReplySnackBar ?? false) {
                         _showReplyPopup(
                           message: message,
@@ -218,13 +191,7 @@ class _ChatListWidgetState extends State<ChatListWidget>
                     },
                     onChatListTap: _onChatListTap,
                   ),
-                  if (featureActiveConfig?.enableReactionPopup ?? false)
-                    ReactionPopup(
-                      key: _reactionPopupKey,
-                      reactionPopupConfig: widget.reactionPopupConfig,
-                      onTap: _onChatListTap,
-                      showPopUp: showPopupValue,
-                    ),
+                
                 ],
               );
             },
@@ -280,9 +247,7 @@ class _ChatListWidgetState extends State<ChatListWidget>
                     },
                     onReplyTap: () {
                       widget.assignReplyMessage(message);
-                      if (featureActiveConfig?.enableReactionPopup ?? false) {
-                        showPopUp.value = false;
-                      }
+                  
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
                       if (replyPopup?.onReplyTap != null) {
                         replyPopup?.onReplyTap!(message);

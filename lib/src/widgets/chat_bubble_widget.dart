@@ -109,7 +109,6 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
   FeatureActiveConfig? featureActiveConfig;
   ChatController? chatController;
   ChatUser? currentUser;
-  int? maxDuration;
 
   @override
   void didChangeDependencies() {
@@ -167,9 +166,7 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
           if (!isMessageBySender &&
               (featureActiveConfig?.enableOtherUserProfileAvatar ?? true))
             ProfileCircle(
-              bottomPadding: widget.message.reaction.reactions.isNotEmpty
-                  ? profileCircleConfig?.bottomPadding ?? 15
-                  : profileCircleConfig?.bottomPadding ?? 2,
+              bottomPadding: profileCircleConfig?.bottomPadding ?? 2,
               profileCirclePadding: profileCircleConfig?.padding,
               imageUrl: messagedUser?.profilePhoto,
               circleRadius: profileCircleConfig?.circleRadius,
@@ -181,10 +178,7 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
                 ? SwipeToReply(
                     onLeftSwipe: featureActiveConfig?.enableSwipeToReply ?? true
                         ? () {
-                            if (maxDuration != null) {
-                              widget.message.voiceMessageDuration =
-                                  Duration(milliseconds: maxDuration!);
-                            }
+                          
                             if (widget.swipeToReplyConfig?.onLeftSwipe !=
                                 null) {
                               widget.swipeToReplyConfig?.onLeftSwipe!(
@@ -203,10 +197,7 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
                     onRightSwipe:
                         featureActiveConfig?.enableSwipeToReply ?? true
                             ? () {
-                                if (maxDuration != null) {
-                                  widget.message.voiceMessageDuration =
-                                      Duration(milliseconds: maxDuration!);
-                                }
+                                
                                 if (widget.swipeToReplyConfig?.onRightSwipe !=
                                     null) {
                                   widget.swipeToReplyConfig?.onRightSwipe!(
@@ -226,9 +217,7 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
           if (isMessageBySender &&
               (featureActiveConfig?.enableCurrentUserProfileAvatar ?? true))
             ProfileCircle(
-              bottomPadding: widget.message.reaction.reactions.isNotEmpty
-                  ? profileCircleConfig?.bottomPadding ?? 15
-                  : profileCircleConfig?.bottomPadding ?? 2,
+              bottomPadding: profileCircleConfig?.bottomPadding ?? 2,
               profileCirclePadding: profileCircleConfig?.padding,
               imageUrl: currentUser?.profilePhoto,
               circleRadius: profileCircleConfig?.circleRadius,
@@ -322,8 +311,7 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
           outgoingChatBubbleConfig:
               widget.chatBubbleConfig?.outgoingChatBubbleConfig,
           isLongPressEnable:
-              (featureActiveConfig?.enableReactionPopup ?? true) ||
-                  (featureActiveConfig?.enableReplySnackBar ?? true),
+              (featureActiveConfig?.enableReplySnackBar ?? true),
           inComingChatBubbleConfig:
               widget.chatBubbleConfig?.inComingChatBubbleConfig,
           message: widget.message,
@@ -351,11 +339,9 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
           highlightScale: widget.repliedMessageConfig
                   ?.repliedMsgAutoScrollConfig.highlightScale ??
               1.1,
-          onMaxDuration: _onMaxDuration,
         ),
       ],
     );
   }
 
-  void _onMaxDuration(int duration) => maxDuration = duration;
 }

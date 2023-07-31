@@ -25,10 +25,8 @@ import 'package:flutter/material.dart';
 
 import 'package:chatview/src/extensions/extensions.dart';
 import '../utils/constants/constants.dart';
-import 'image_message_view.dart';
+
 import 'text_message_view.dart';
-import 'reaction_widget.dart';
-import 'voice_message_view.dart';
 
 class MessageView extends StatefulWidget {
   const MessageView({
@@ -46,7 +44,6 @@ class MessageView extends StatefulWidget {
     this.shouldHighlight = false,
     this.highlightScale = 1.2,
     this.messageConfig,
-    this.onMaxDuration,
     this.controller,
   }) : super(key: key);
 
@@ -92,7 +89,6 @@ class MessageView extends StatefulWidget {
 
   final ChatController? controller;
 
-  final Function(int)? onMaxDuration;
 
   @override
   State<MessageView> createState() => _MessageViewState();
@@ -159,7 +155,7 @@ class _MessageViewState extends State<MessageView>
     final emojiMessageConfiguration = messageConfig?.emojiMessageConfig;
     return Padding(
       padding: EdgeInsets.only(
-        bottom: widget.message.reaction.reactions.isNotEmpty ? 6 : 0,
+        bottom: 0,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -175,9 +171,7 @@ class _MessageViewState extends State<MessageView>
                               leftPadding2,
                               4,
                               leftPadding2,
-                              widget.message.reaction.reactions.isNotEmpty
-                                  ? 14
-                                  : 0,
+                              0,
                             ),
                         child: Transform.scale(
                           scale: widget.shouldHighlight
@@ -190,23 +184,7 @@ class _MessageViewState extends State<MessageView>
                           ),
                         ),
                       ),
-                      if (widget.message.reaction.reactions.isNotEmpty)
-                        ReactionWidget(
-                          reaction: widget.message.reaction,
-                          messageReactionConfig:
-                              messageConfig?.messageReactionConfig,
-                          isMessageBySender: widget.isMessageBySender,
-                        ),
                     ],
-                  );
-                } else if (widget.message.messageType.isImage) {
-                  return ImageMessageView(
-                    message: widget.message,
-                    isMessageBySender: widget.isMessageBySender,
-                    imageMessageConfig: messageConfig?.imageMessageConfig,
-                    messageReactionConfig: messageConfig?.messageReactionConfig,
-                    highlightImage: widget.shouldHighlight,
-                    highlightScale: widget.highlightScale,
                   );
                 } else if (widget.message.messageType.isText) {
                   return TextMessageView(
@@ -215,20 +193,8 @@ class _MessageViewState extends State<MessageView>
                     isMessageBySender: widget.isMessageBySender,
                     message: widget.message,
                     chatBubbleMaxWidth: widget.chatBubbleMaxWidth,
-                    messageReactionConfig: messageConfig?.messageReactionConfig,
                     highlightColor: widget.highlightColor,
                     highlightMessage: widget.shouldHighlight,
-                  );
-                } else if (widget.message.messageType.isVoice) {
-                  return VoiceMessageView(
-                    screenWidth: MediaQuery.of(context).size.width,
-                    message: widget.message,
-                    config: messageConfig?.voiceMessageConfig,
-                    onMaxDuration: widget.onMaxDuration,
-                    isMessageBySender: widget.isMessageBySender,
-                    messageReactionConfig: messageConfig?.messageReactionConfig,
-                    inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
-                    outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
                   );
                 } else if (widget.message.messageType.isCustom &&
                     messageConfig?.customMessageBuilder != null) {

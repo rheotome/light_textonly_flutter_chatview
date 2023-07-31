@@ -19,7 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:chatview/src/values/enumaration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,34 +45,20 @@ class SendMessageConfiguration {
   /// Used to give color to close icon in reply pop-up.
   final Color? closeIconColor;
 
-  /// Provides configuration of image picker functionality.
-  final ImagePickerIconsConfiguration? imagePickerIconsConfig;
-
   /// Provides configuration of text field.
   final TextFieldConfiguration? textFieldConfig;
 
-  /// Enable/disable voice recording. Enabled by default.
-  final bool allowRecordingVoice;
 
-  /// Color of mic icon when replying to some voice message.
-  final Color? micIconColor;
-
-  /// Styling configuration for recorder widget.
-  final VoiceRecordingConfiguration? voiceRecordingConfiguration;
 
   const SendMessageConfiguration({
     this.textFieldConfig,
     this.textFieldBackgroundColor,
-    this.imagePickerIconsConfig,
     this.defaultSendButtonColor,
     this.sendButtonIcon,
     this.replyDialogColor,
     this.replyTitleColor,
     this.replyMessageColor,
     this.closeIconColor,
-    this.allowRecordingVoice = true,
-    this.voiceRecordingConfiguration,
-    this.micIconColor,
   });
 }
 
@@ -135,8 +120,6 @@ class TextFieldConfiguration {
   /// Used to give textCapitalization enums to text field.
   final TextCapitalization? textCapitalization;
 
-  /// Callback when a user starts/stops typing a message by [TypeWriterStatus]
-  final void Function(TypeWriterStatus status)? onMessageTyping;
 
   /// After typing stopped, the threshold time after which the composing
   /// status to be changed to [TypeWriterStatus.composed].
@@ -154,7 +137,6 @@ class TextFieldConfiguration {
     this.margin,
     this.minLines,
     this.textInputType,
-    this.onMessageTyping,
     this.compositionThresholdTime = const Duration(seconds: 1),
     this.inputFormatters,
     this.textCapitalization,
@@ -164,7 +146,6 @@ class TextFieldConfiguration {
 /// Styling configuration for recorder widget.
 class VoiceRecordingConfiguration {
   const VoiceRecordingConfiguration({
-    this.waveStyle,
     this.padding,
     this.margin,
     this.decoration,
@@ -174,8 +155,6 @@ class VoiceRecordingConfiguration {
     this.stopIcon,
   });
 
-  /// Applies styles to waveform.
-  final WaveStyle? waveStyle;
 
   /// Applies padding around waveform widget.
   final EdgeInsets? padding;
